@@ -1,0 +1,37 @@
+# MANUAL DAS CORES:
+# Vermelho para os cabeçalhos e mensagens de erro.
+# Azul para informações gerais.
+# Verde para mensagens de sucesso.
+# Amarelo para os campos de IP.
+# Ciano para as bordas da tabela.
+
+
+#!/bin/bash
+
+if [ "$1" == "" ]; then
+    echo -e "\e[1;31m================================================================================\e[0m"
+    echo -e "\e[1;31m                                    RaPh...               \e[0m"
+    echo -e "\e[1;31m[+] Modo de uso: $0 site.com\e[0m"
+    echo -e "\e[1;31m================================================================================\e[0m"
+else
+    echo -e "\e[1;34m[+] Resolvendo Site em: $1\e[0m"
+
+    # Removendo caracteres não alfanuméricos do nome do arquivo
+    filename=$(echo "$1" | tr -cd '[:alnum:]')
+
+    wget $1 2> /dev/null
+    grep href index.html | cut -d "/" -f 3 | grep "\." | grep -v "<l" | cut -d '"' -f 1 > "$filename"_lista
+
+    echo -e "\e[1;32m[+] Salvando resultado em: $filename""_lista\e[0m"
+
+    echo -e "\e[1;36m=====================================================================================================================\e[0m"
+    printf "| \e[1;33m%-65s\e[0m | \e[1;33m%-60s\e[0m |\n" "IP" "ENDEREÇO"
+    echo -e "\e[1;36m=====================================================================================================================\e[0m"
+
+    while IFS= read -r url; do
+        ip=$(host $url | awk '/has address/ {print $NF}')
+        printf "| \e[1;34m%-65s\e[0m | \e[1;34m%-60s\e[0m |\n" "$ip" "$url"
+    done < "$filename"_lista
+
+    echo -e "\e[1;36m=====================================================================================================================\e[0m"
+fi
