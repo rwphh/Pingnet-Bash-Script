@@ -1,3 +1,6 @@
+# Esse código serve para pingar uma rede afim de descobrir os hosts ativos.
+# Basicamente esse script faz um ping no host e espera sua resposta. Caso o host esteja ativo ele responde e o script joga o host na tela, caso não responda, o script não nos retorna nada e vai para o próximo.
+
 # Pingnet-Bash-Script
 #!/bin/bash
 if [ "$1" == "" ]
