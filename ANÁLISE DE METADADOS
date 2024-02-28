@@ -1,0 +1,30 @@
+
+# OBS: SOFTWARES NECESSÁRIOS: lynx / exiftool (AMBOS PODEM SER BAIXADOS COM APT INSTALL)
+# Caso o programa resulte em algum erro, provavelmente o site não possuí o tipo de arquivo escolhido, tenha certeza e pesquise por esse arquivo.
+# Filtre o código a sua necessidade.
+
+#!/bin/bash
+
+echo "-----------------------------------------"
+echo "[+] Insira o site:"
+echo "-----------------------------------------"
+read sites
+echo "-----------------------------------------"
+echo "[+] Extensões suportadas:"
+echo "pdf,doc,docx,xls,xlsx,ppt,pptx"
+echo "Escolha uma:"
+read escolha
+echo "-----------------------------------------"
+
+echo "-----------------------------------------"
+echo "[+] Realizando Pesquisa..."
+echo "-----------------------------------------"
+lynx --dump "https://google.com/search?&q=site:$sites+ext:$escolha" | grep ".$escolha" | cut -d "=" -f 2 | egrep -v "site|google" | sed s/...$// > resultado
+echo "-----------------------------------------"
+echo "[+] REALIZANDO ANÁLISE DE METADADOS"
+echo "-----------------------------------------"
+for url in $(cat resultado);do
+wget -q $url
+exiftool *.$escolha
+done
+
